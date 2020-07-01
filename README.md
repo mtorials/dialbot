@@ -7,3 +7,4 @@ Dialbot is in an early development stage and not ready for production use yet.
 
 - RSS channel room
 - webhooks
+- moderation (word filter)
