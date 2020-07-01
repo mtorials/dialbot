@@ -1,6 +1,5 @@
 package de.mtorials.dialbot.webhooks
 
-import de.mtorials.dialbot.config
 import de.mtorials.dialbot.logger
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
@@ -17,7 +16,7 @@ import org.http4k.routing.routes
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
 
-fun startWebhooks(phone: DialPhone) {
+fun startWebhooks(phone: DialPhone, token: String, port: Int) {
 
     val bodyLens = Body.string(ContentType.TEXT_PLAIN).toLens()
     val queryLens = Query.optional("roomId")
@@ -25,7 +24,7 @@ fun startWebhooks(phone: DialPhone) {
 
     val auth = Filter { next ->
         block@{ request ->
-            if (authLens(request) != config.webhooks.token) return@block Response(Status.UNAUTHORIZED)
+            if (authLens(request) != token) return@block Response(Status.UNAUTHORIZED)
             next(request)
         }
     }
@@ -59,5 +58,5 @@ fun startWebhooks(phone: DialPhone) {
     ))
 
     logger.info("starting server...")
-    app.asServer(Jetty(config.port)).start()
+    app.asServer(Jetty(port)).start()
 }

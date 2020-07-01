@@ -7,7 +7,8 @@ data class Config(
     val commandPrefix: String = "!",
 
     val webhooks: Webhooks = Webhooks(),
-    val reddit: Reddit = Reddit(false, arrayOf())
+    val reddit: Reddit = Reddit(false, arrayOf()),
+    val moderation: Moderation = Moderation()
 ) {
     class Webhooks(
         val token: String = "<YOUR SECRET HERE>",
@@ -22,5 +23,20 @@ data class Config(
             val subredditUrl: String = "https://reddit.com/ProgrammerHumor",
             val roomId: String = "!YIqYutrrBUdGDombnI:mtorials.de"
         )
+    }
+
+    class Moderation(
+        val enable: Boolean = false,
+        val rooms: Array<RoomModeration> = arrayOf(RoomModeration())
+    ) {
+        class RoomModeration(
+            val roomId: String = "<Your_RoomId>",
+            val filter: WordFilter = WordFilter()
+        ) {
+            class WordFilter(
+                val enable: Boolean = true,
+                val words: Array<String> = arrayOf("dick", "fucking")
+            )
+        }
     }
 }

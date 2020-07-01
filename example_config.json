@@ -1,0 +1,19 @@
+{
+  "matrixToken": "<Your Token>",
+  "homeserverUrl": "https://matrix.mtorials.de",
+  "port": 9009,
+  "commandPrefix": "&",
+  "webhooks": {
+    "enable": false,
+    "token": "<secret>"
+  },
+  "reddit": {
+    "enable": true,
+    "roomToSubreddit": [
+      {
+        "subredditUrl": "https://www.reddit.com/r/Kotlin",
+        "roomId": "!xxx:xxx.com"
+      }
+    ]
+  }
+}

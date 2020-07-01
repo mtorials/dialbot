@@ -10,11 +10,20 @@ import de.mtorials.dialphone.DialPhoneImpl
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.io.File
+import java.io.FileNotFoundException
 
 val logger = KotlinLogging.logger {}
-val config : Config = jacksonObjectMapper().readValue(File("config.json"))
+const val configFileName = "config2.json"
 
 fun main() {
+
+    val config: Config
+    try {
+         config = jacksonObjectMapper().readValue(File(configFileName))
+    } catch (e: FileNotFoundException) {
+        File(configFileName).writeText(jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Config()))
+        return
+    }
 
     val phone = DialPhoneImpl(
         token = config.matrixToken,
@@ -28,7 +37,7 @@ fun main() {
 
     if (config.webhooks.enable) {
         logger.info("Starting Webhooks...")
-        startWebhooks(phone)
+        startWebhooks(phone, config.webhooks.token, config.port)
     }
 
     if (config.reddit.enable) config.reddit.roomToSubreddit.forEach {
