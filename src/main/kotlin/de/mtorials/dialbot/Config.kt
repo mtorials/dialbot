@@ -35,7 +35,7 @@ data class Config(
         ) {
             class WordFilter(
                 val enable: Boolean = true,
-                val words: Array<String> = arrayOf("dick", "fucking")
+                val words: Array<String> = arrayOf("badword", "badword2")
             )
         }
     }
