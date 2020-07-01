@@ -1,5 +1,8 @@
 package de.mtorials.dialbot
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import java.io.File
+
 data class Config(
     val matrixToken: String = "<YOUR MATRIX ACCOUNT TOKEN>",
     val homeserverUrl: String = "<YOUR_HOMESERVER_URL>",
@@ -7,7 +10,7 @@ data class Config(
     val commandPrefix: String = "!",
 
     val webhooks: Webhooks = Webhooks(),
-    val reddit: Reddit = Reddit(false, arrayOf()),
+    val reddit: Reddit = Reddit(),
     val moderation: Moderation = Moderation()
 ) {
     class Webhooks(
@@ -17,17 +20,17 @@ data class Config(
 
     class Reddit(
         val enable: Boolean = false,
-        val roomToSubreddit: Array<RoomToSubReddit>
+        val roomToSubreddit: MutableList<RoomToSubReddit> = mutableListOf(RoomToSubReddit())
     ) {
         class RoomToSubReddit(
             val subredditUrl: String = "https://reddit.com/ProgrammerHumor",
-            val roomId: String = "!YIqYutrrBUdGDombnI:mtorials.de"
+            val roomId: String = "!xxx:xxx.com"
         )
     }
 
     class Moderation(
         val enable: Boolean = false,
-        val rooms: Array<RoomModeration> = arrayOf(RoomModeration())
+        val rooms: MutableList<RoomModeration> = mutableListOf(RoomModeration())
     ) {
         class RoomModeration(
             val roomId: String = "<Your_RoomId>",
@@ -35,7 +38,15 @@ data class Config(
         ) {
             class WordFilter(
                 val enable: Boolean = true,
-                val words: Array<String> = arrayOf("badword", "badword2")
+                val words: MutableList<String> = mutableListOf("badword", "badword2")
+            )
+        }
+    }
+
+    companion object {
+        fun writeConfig(config: Config) {
+            File(configFileName).writeText(
+                jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(config)
             )
         }
     }
