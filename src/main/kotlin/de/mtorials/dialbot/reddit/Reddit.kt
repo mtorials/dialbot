@@ -17,7 +17,8 @@ import java.time.ZonedDateTime
 class Reddit(
     phone: DialPhone,
     private val subredditUrl: String,
-    private val roomId: String
+    private val roomId: String,
+    updateIntervalMillis: Long
 ) {
 
     private var feed: SyndFeed = SyndFeedInput().build(XmlReader(URL("$subredditUrl/new.rss")))
@@ -30,7 +31,7 @@ class Reddit(
             roomA = phone.getJoinedRoomFutureById(roomId) ?: error("Bot has not joined room with id $roomId yet!")
         }
         room = roomA
-        phone.registerOnInterval(10000) {
+        phone.registerOnInterval(updateIntervalMillis) {
             runBlocking {
                 feed = SyndFeedInput().build(XmlReader(URL("$subredditUrl/new.rss")))
                 update()

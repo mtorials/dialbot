@@ -20,7 +20,8 @@ data class Config(
 
     class Reddit(
         val enable: Boolean = false,
-        val roomToSubreddit: MutableList<RoomToSubReddit> = mutableListOf(RoomToSubReddit())
+        val roomToSubreddit: MutableList<RoomToSubReddit> = mutableListOf(RoomToSubReddit()),
+        val updateIntervalMillis: Long = 20000L
     ) {
         class RoomToSubReddit(
             val subredditUrl: String = "https://reddit.com/ProgrammerHumor",

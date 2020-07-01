@@ -46,7 +46,7 @@ fun main() {
     }
 
     if (config.reddit.enable) config.reddit.roomToSubreddit.forEach {
-        Reddit(phone, it.subredditUrl, it.roomId)
+        Reddit(phone, it.subredditUrl, it.roomId, config.reddit.updateIntervalMillis)
     }
 
     runBlocking {

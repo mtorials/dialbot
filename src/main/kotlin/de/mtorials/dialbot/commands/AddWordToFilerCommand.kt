@@ -7,8 +7,9 @@ import de.mtorials.dialphone.listener.CommandAdapter
 
 class AddWordToFilerCommand(private val config: Config) : CommandAdapter("addToFilter") {
     override suspend fun execute(event: MessageReceivedEvent, parameters: Array<String>) {
-        event answer "Ok!"
-        config.moderation.rooms.filter { roomModeration -> roomModeration.roomId == event.roomFuture.id }[0].filter.words.add("aaaaaa")
+        config.moderation.rooms.filter { roomModeration -> roomModeration.roomId == event.roomFuture.id }[0]
+            .filter.words.add(parameters[0])
         Config.writeConfig(config)
+        event answer "Ok. Added ${parameters[0]} to the blacklist!"
     }
 }
