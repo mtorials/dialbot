@@ -2,11 +2,12 @@ package de.mtorials.dialbot
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import de.mtorials.dialbot.commands.AddWordToFilerCommand
+import de.mtorials.dialbot.commands.FilterCommand
+import de.mtorials.dialbot.commands.ModerationCommand
 import de.mtorials.dialbot.commands.PingCommand
 import de.mtorials.dialbot.listeners.InviteListener
 import de.mtorials.dialbot.listeners.WordListener
-import de.mtorials.dialbot.reddit.Reddit
+import de.mtorials.dialbot.rss.Rss
 import de.mtorials.dialbot.webhooks.startWebhooks
 import de.mtorials.dialphone.DialPhoneImpl
 import kotlinx.coroutines.runBlocking
@@ -15,7 +16,7 @@ import java.io.File
 import java.io.FileNotFoundException
 
 val logger = KotlinLogging.logger {}
-const val configFileName = "config2.json"
+const val configFileName = "config.json"
 
 fun main() {
 
@@ -23,7 +24,8 @@ fun main() {
     try {
          config = jacksonObjectMapper().readValue(File(configFileName))
     } catch (e: FileNotFoundException) {
-        File(configFileName).writeText(jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Config()))
+        println("generate config file....")
+        File(configFileName).writeText(jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Config.getExampleConfig()))
         return
     }
 
@@ -33,20 +35,23 @@ fun main() {
         commandPrefix = config.commandPrefix,
         listeners = listOf(
             PingCommand(),
-            AddWordToFilerCommand(config),
-            InviteListener()
+            FilterCommand(config),
+            InviteListener(),
+            ModerationCommand(config)
         )
     )
 
-    if (config.moderation.enable) phone.addListener(WordListener(config.moderation))
+    if (config.moderation.enable) {
+        phone.addListener(WordListener(config.moderation))
+    }
 
     if (config.webhooks.enable) {
         logger.info("Starting Webhooks...")
-        startWebhooks(phone, config.webhooks.token, config.port)
+        startWebhooks(phone, config.webhooks.secret, config.port)
     }
 
-    if (config.reddit.enable) config.reddit.roomToSubreddit.forEach {
-        Reddit(phone, it.subredditUrl, it.roomId, config.reddit.updateIntervalMillis)
+    if (config.rss.enable) config.rss.rssUrlByRoomId.forEach { (roomId, url) ->
+        Rss(phone, url, roomId, config.rss.updateIntervalMillis)
     }
 
     runBlocking {

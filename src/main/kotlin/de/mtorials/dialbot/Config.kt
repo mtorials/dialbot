@@ -4,51 +4,73 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 
 data class Config(
-    val matrixToken: String = "<YOUR MATRIX ACCOUNT TOKEN>",
-    val homeserverUrl: String = "<YOUR_HOMESERVER_URL>",
+    val matrixToken: String,
+    val homeserverUrl: String,
     val port: Int = 9009,
-    val commandPrefix: String = "!",
+    val commandPrefix: String,
+    val wordLists: MutableMap<String, MutableList<String>>,
 
-    val webhooks: Webhooks = Webhooks(),
-    val reddit: Reddit = Reddit(),
-    val moderation: Moderation = Moderation()
+    val webhooks: Webhooks,
+    val rss: Rss,
+    val moderation: Moderation
 ) {
     class Webhooks(
-        val token: String = "<YOUR SECRET HERE>",
-        val enable: Boolean = false
+        val secret: String,
+        val enable: Boolean
     )
 
-    class Reddit(
-        val enable: Boolean = false,
-        val roomToSubreddit: MutableList<RoomToSubReddit> = mutableListOf(RoomToSubReddit()),
+    class Rss(
+        val enable: Boolean,
+        val rssUrlByRoomId: MutableMap<String, String>,
         val updateIntervalMillis: Long = 20000L
+    )
+
+    class Moderation(
+        val enable: Boolean,
+        val roomModerationById: MutableMap<String, RoomModeration>
     ) {
-        class RoomToSubReddit(
-            val subredditUrl: String = "https://reddit.com/ProgrammerHumor",
-            val roomId: String = "!xxx:xxx.com"
+        class RoomModeration(
+            val filter: WordFilter
+        ) {
+            class WordFilter(
+                var enable: Boolean,
+                val words: MutableList<String>
+            )
+        }
+    }
+
+    fun write() {
+        File(configFileName).writeText(
+            jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(this)
         )
     }
 
-    class Moderation(
-        val enable: Boolean = false,
-        val rooms: MutableList<RoomModeration> = mutableListOf(RoomModeration())
-    ) {
-        class RoomModeration(
-            val roomId: String = "<Your_RoomId>",
-            val filter: WordFilter = WordFilter()
-        ) {
-            class WordFilter(
-                val enable: Boolean = true,
-                val words: MutableList<String> = mutableListOf("badword", "badword2")
-            )
-        }
-    }
-
     companion object {
-        fun writeConfig(config: Config) {
-            File(configFileName).writeText(
-                jacksonObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(config)
+        fun getExampleConfig() = Config(
+            matrixToken = "<YOUR_TOKEN>",
+            commandPrefix = "!",
+            homeserverUrl = "https://xxx:yyy.com",
+            port = 9009,
+            wordLists = mutableMapOf("<LIST_NAME>" to mutableListOf("badword", "morebad", "reallybad")),
+            webhooks = Webhooks(
+                enable = false,
+                secret = "<SECRET>"
+            ),
+            rss = Rss(
+                enable = false,
+                updateIntervalMillis = 20000,
+                rssUrlByRoomId = mutableMapOf("<YOUR_ROOMID>" to "https://reddit.com/ProgrammerHumor/new.rss")
+            ),
+            moderation = Moderation(
+                enable = false,
+                roomModerationById = mutableMapOf("<YOUR_ROOMID" to Moderation.RoomModeration(
+                    filter = Moderation.RoomModeration.WordFilter(
+                        enable = true,
+                        words = mutableListOf("badword", "reallybadword")
+                    )
+                ))
             )
-        }
+        )
+
     }
 }

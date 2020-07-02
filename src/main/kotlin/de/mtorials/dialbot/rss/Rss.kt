@@ -1,4 +1,4 @@
-package de.mtorials.dialbot.reddit
+package de.mtorials.dialbot.rss
 
 
 import com.rometools.rome.feed.synd.SyndEntry
@@ -9,12 +9,11 @@ import de.mtorials.dialbot.registerOnInterval
 import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.sendHtmlMessage
-import de.mtorials.dialphone.sendTextMessage
 import kotlinx.coroutines.runBlocking
 import java.net.URL
 import java.time.ZonedDateTime
 
-class Reddit(
+class Rss(
     phone: DialPhone,
     private val subredditUrl: String,
     private val roomId: String,
