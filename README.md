@@ -8,3 +8,9 @@ Dialbot is in an early development stage and not ready for production use yet.
 - RSS channel room
 - webhooks
 - moderation (word filter)
+
+## Config
+
+If it is not existing, dialbot will create a config file named `config.json`.
+It will contain example values you will have to change. Some of these can be changed with commands
+during runtime.
