@@ -3,6 +3,7 @@ package de.mtorials.dialbot
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import de.mtorials.dialbot.commands.FilterCommand
+import de.mtorials.dialbot.commands.GifCommand
 import de.mtorials.dialbot.commands.ModerationCommand
 import de.mtorials.dialbot.commands.PingCommand
 import de.mtorials.dialbot.listeners.InviteListener
@@ -37,7 +38,8 @@ fun main() {
             PingCommand(),
             FilterCommand(config),
             InviteListener(),
-            ModerationCommand(config)
+            ModerationCommand(config),
+            GifCommand(config.giphyApiKey)
         )
     )
 

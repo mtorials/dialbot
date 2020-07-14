@@ -9,6 +9,7 @@ data class Config(
     val port: Int = 9009,
     val commandPrefix: String,
     val wordLists: MutableMap<String, MutableList<String>>,
+    val giphyApiKey: String,
 
     val webhooks: Webhooks,
     val rss: Rss,
@@ -46,6 +47,7 @@ data class Config(
             commandPrefix = "!",
             homeserverUrl = "https://xxx:yyy.com",
             port = 9009,
+            giphyApiKey = "GIPHY_API_KEY",
             wordLists = mutableMapOf("<LIST_NAME>" to mutableListOf("badword", "morebad", "reallybad")),
             webhooks = Webhooks(
                 enable = false,
