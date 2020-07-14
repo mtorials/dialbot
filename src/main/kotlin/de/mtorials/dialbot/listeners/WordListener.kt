@@ -14,8 +14,7 @@ class WordListener(
         if (event.senderId == event.phone.ownId) return
         for ((id, mod) in moderationConfig.roomModerationById) {
             if (id != event.roomFuture.id) continue
-            if (!mod.filter.enable) return
-            mod.filter.words.forEach {
+            mod.filteredWords.forEach {
                 if (event.message.body.contains(it)) {
                     delete(event)
                     return

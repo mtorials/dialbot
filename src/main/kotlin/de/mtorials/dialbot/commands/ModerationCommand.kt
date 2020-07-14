@@ -16,7 +16,7 @@ class ModerationCommand(private val config: Config) : CommandAdapter("moderation
                     return
                 }
                 config.moderation.roomModerationById[event.roomFuture.id] = Config.Moderation.RoomModeration(
-                    filter = Config.Moderation.RoomModeration.WordFilter(false, mutableListOf())
+                    filteredWords = mutableListOf()
                 )
                 event answerOk "Enabled moderation for this room!"
                 return

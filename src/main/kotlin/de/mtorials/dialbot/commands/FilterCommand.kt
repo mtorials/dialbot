@@ -21,21 +21,16 @@ class FilterCommand(private val config: Config) : CommandAdapter("filter") {
             ?: error("Error! Config does not exist!")
 
         when(parameters[0]) {
-            "enable" -> {
-                moderationRoom.filter.enable = true
-                event answerOk "Enabled!"
-            }
-            "disable" -> {
-                moderationRoom.filter.enable = false
-                event answerOk "Disabled!"
-            }
             "add" ->{
-                moderationRoom.filter.words.add(parameters[2])
+                moderationRoom.filteredWords.add(parameters[2])
                 event answerOk "Added ${parameters[2]} to the blacklist!"
             }
             "remove" -> {
-                moderationRoom.filter.words.remove(parameters[2])
+                moderationRoom.filteredWords.remove(parameters[2])
                 event answerOk "Removed ${parameters[2]} from the blacklist!"
+            }
+            "removeAll" -> {
+                moderationRoom.filteredWords.clear()
             }
         }
         config.write()

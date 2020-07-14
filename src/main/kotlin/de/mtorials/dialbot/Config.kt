@@ -30,13 +30,8 @@ data class Config(
         val roomModerationById: MutableMap<String, RoomModeration>
     ) {
         class RoomModeration(
-            val filter: WordFilter
-        ) {
-            class WordFilter(
-                var enable: Boolean,
-                val words: MutableList<String>
-            )
-        }
+            val filteredWords: MutableList<String>
+        )
     }
 
     fun write() {
@@ -64,10 +59,7 @@ data class Config(
             moderation = Moderation(
                 enable = false,
                 roomModerationById = mutableMapOf("<YOUR_ROOMID" to Moderation.RoomModeration(
-                    filter = Moderation.RoomModeration.WordFilter(
-                        enable = true,
-                        words = mutableListOf("badword", "reallybadword")
-                    )
+                    filteredWords = mutableListOf("badword", "reallybadword")
                 ))
             )
         )
