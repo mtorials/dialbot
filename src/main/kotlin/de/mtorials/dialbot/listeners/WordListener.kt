@@ -11,7 +11,7 @@ class WordListener(
 ) : ListenerAdapter() {
 
     override suspend fun onRoomMessageReceive(event: MessageReceivedEvent) {
-        if (event.senderId == event.phone.ownId) return
+        if (event.sender.id == event.phone.ownId) return
         for ((id, mod) in moderationConfig.roomModerationById) {
             if (id != event.roomFuture.id) continue
             mod.filteredWords.forEach {

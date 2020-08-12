@@ -10,6 +10,7 @@ import de.mtorials.dialbot.listeners.InviteListener
 import de.mtorials.dialbot.listeners.WordListener
 import de.mtorials.dialbot.rss.Rss
 import de.mtorials.dialbot.webhooks.startWebhooks
+import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.DialPhoneImpl
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
@@ -30,18 +31,18 @@ fun main() {
         return
     }
 
-    val phone = DialPhoneImpl(
-        token = config.matrixToken,
-        homeserverUrl = config.homeserverUrl,
-        commandPrefix = config.commandPrefix,
-        listeners = listOf(
-            PingCommand(),
-            FilterCommand(config),
-            InviteListener(),
-            ModerationCommand(config),
-            GifCommand(config.giphyApiKey)
-        )
-    )
+    val phone = DialPhone {
+        homeserverUrl = config.homeserverUrl
+        withToken(config.matrixToken)
+        hasCommandPrefix(config.commandPrefix)
+        addListeners {
+            add(PingCommand())
+            add(FilterCommand(config))
+            add(InviteListener())
+            add(ModerationCommand(config))
+            add(GifCommand(config.giphyApiKey))
+        }
+    }
 
     if (config.moderation.enable) {
         phone.addListener(WordListener(config.moderation))

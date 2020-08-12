@@ -20,7 +20,7 @@ shadowJar {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "de.mtorials:dial-phone:56279e2e"
+    implementation "de.mtorials:dial-phone:0.4.0-alpha"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
     compile group: "org.http4k", name: "http4k-core", version: "3.251.0"
     compile group: "org.http4k", name: "http4k-format-jackson", version: "3.251.0"
