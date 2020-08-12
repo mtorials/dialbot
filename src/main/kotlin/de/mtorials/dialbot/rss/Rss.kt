@@ -10,6 +10,7 @@ import de.mtorials.dialphone.DialPhone
 import de.mtorials.dialphone.entities.entityfutures.RoomFuture
 import de.mtorials.dialphone.sendHtmlMessage
 import kotlinx.coroutines.runBlocking
+import java.lang.RuntimeException
 import java.net.URL
 import java.time.ZonedDateTime
 
@@ -27,7 +28,7 @@ class Rss(
     init {
         val roomA : RoomFuture
         runBlocking {
-            roomA = phone.getJoinedRoomFutureById(roomId) ?: error("Bot has not joined room with id $roomId yet!")
+            roomA = phone.getJoinedRoomFutureById(roomId) ?: throw RuntimeException("Bot has not joined room with id $roomId yet!")
         }
         room = roomA
         phone.registerOnInterval(updateIntervalMillis) {

@@ -16,6 +16,7 @@ import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.io.File
 import java.io.FileNotFoundException
+import java.lang.RuntimeException
 
 val logger = KotlinLogging.logger {}
 const val configFileName = "config.json"
@@ -54,7 +55,11 @@ fun main() {
     }
 
     if (config.rss.enable) config.rss.rssUrlByRoomId.forEach { (roomId, url) ->
-        Rss(phone, url, roomId, config.rss.updateIntervalMillis)
+        try {
+            Rss(phone, url, roomId, config.rss.updateIntervalMillis)
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
+        }
     }
 
     runBlocking {
