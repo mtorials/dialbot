@@ -20,7 +20,7 @@ class Rss(
     updateIntervalMillis: Long
 ) {
 
-    private var feed: SyndFeed = SyndFeedInput().build(XmlReader(URL("$subredditUrl/new.rss")))
+    private var feed: SyndFeed = SyndFeedInput().build(XmlReader(URL(subredditUrl)))
     private val room : RoomFuture
     private var lastTime: Long = ZonedDateTime.now().minusDays(1).toEpochSecond()
 
@@ -32,7 +32,7 @@ class Rss(
         room = roomA
         phone.registerOnInterval(updateIntervalMillis) {
             runBlocking {
-                feed = SyndFeedInput().build(XmlReader(URL("$subredditUrl/new.rss")))
+                feed = SyndFeedInput().build(XmlReader(URL(subredditUrl)))
                 update()
             }
             true

@@ -9,13 +9,14 @@ import de.mtorials.dialphone.dialevents.MessageReceivedEvent
 import de.mtorials.dialphone.dialevents.answer
 import de.mtorials.dialphone.listener.CommandAdapter
 import org.http4k.client.JavaHttpClient
+import org.http4k.client.OkHttp
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Request
 
 class GifCommand(
     private val apiKey: String,
-    private val client: HttpHandler = JavaHttpClient()
+    private val client: HttpHandler = OkHttp()
 ) : CommandAdapter("gif") {
     override suspend fun execute(event: MessageReceivedEvent, parameters: Array<String>) {
         event answer search(parameters[0])[0].url

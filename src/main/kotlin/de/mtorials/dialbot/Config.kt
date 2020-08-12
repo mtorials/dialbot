@@ -56,7 +56,7 @@ data class Config(
             rss = Rss(
                 enable = false,
                 updateIntervalMillis = 20000,
-                rssUrlByRoomId = mutableMapOf("<YOUR_ROOMID>" to "https://reddit.com/ProgrammerHumor/new.rss")
+                rssUrlByRoomId = mutableMapOf("<YOUR_ROOMID>" to "https://reddit.com/r/ProgrammerHumor/new.rss")
             ),
             moderation = Moderation(
                 enable = false,
