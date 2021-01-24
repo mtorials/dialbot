@@ -21,7 +21,7 @@ import java.lang.RuntimeException
 val logger = KotlinLogging.logger {}
 const val configFileName = "config.json"
 
-fun main() {
+suspend fun main() {
 
     val config: Config
     try {
@@ -62,7 +62,5 @@ fun main() {
         }
     }
 
-    runBlocking {
-        phone.sync().join()
-    }
+    phone.sync()
 }
